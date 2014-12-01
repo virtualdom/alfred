@@ -46,6 +46,14 @@ var compliment = {
     4: ', I might actually be in love with you. And I\'m not even real, so that means something.'
 }, complimentTotal = _.keys(compliment).length;
 
+var pcompliment = {
+    0: ', you have the most beautiful eyes. And booty.',
+    1: ' has a booty that is absolutely to die for.',
+    2: ' is Miss New Booty. Get it together and bring it back to me.',
+    3: ', you rock. Like, honestly. Do you realize how incomplete life would be without you?',
+    4: ', I might actually be in love with you. And I\'m not even real, so that means something.'
+}, pcomplimentTotal = _.keys(pcompliment).length;
+
 var mad = {
     0: 'https://33.media.tumblr.com/tumblr_m140vycDbs1rqfhi2o1_400.gif',
     1: 'Whoa, master, please control yourself.'
@@ -89,7 +97,15 @@ app.post('/', function (req, res, next) {
         else if (name === 'yourself' || name === 'him' || name === 'her' || name === 'us' || name === 'them') {
             options.form.text = 'I need names, master.';
         }
-        else options.form.text = name + compliment[Math.floor(Math.random() * complimentTotal)];
+        else if (name.match(/\band\b/)) {
+            name = name.charAt(0).toUpperCase() + name.substring(1);
+            options.form.text = name + pcompliment[Math.floor(Math.random() * pcomplimentTotal)];
+        }
+        else {
+            if (name.match(/\bmy\b/)) name.replace('my', 'your');
+            name = name.charAt(0).toUpperCase() + name.substring(1);
+            options.form.text = name + compliment[Math.floor(Math.random() * complimentTotal)];
+        }
     }
     else if (req.body.text.toLowerCase().match(/\bfood\b/)) {
         options.form.text = food[Math.floor(Math.random() * foodTotal)];
