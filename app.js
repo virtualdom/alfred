@@ -38,6 +38,16 @@ var insult = {
     6: ', can you please stop? Just stop.'
 }, insultTotal = _.keys(insult).length;
 
+var pinsult = {
+    0: ' is a booty.',
+    1: ' smells like booty.',
+    2: ' looks like booty.',
+    3: ' has a big booty. Wait, that\'s a compliment...',
+    4: ' probably tastes like a donkey booty.',
+    5: ', something about you really makes me want to walk into traffic.',
+    6: ', can you please stop? Just stop.'
+}, pinsultTotal = _.keys(pinsult).length;
+
 var compliment = {
     0: ', you have the most beautiful eyes. And booty.',
     1: ' has a booty that is absolutely to die for.',
@@ -45,6 +55,14 @@ var compliment = {
     3: ', you rock. Like, honestly. Do you realize how incomplete life would be without you?',
     4: ', I might actually be in love with you. And I\'m not even real, so that means something.'
 }, complimentTotal = _.keys(compliment).length;
+
+var pcompliment = {
+    0: ', you have the most beautiful eyes. And booty.',
+    1: ' has a booty that is absolutely to die for.',
+    2: ' is Miss New Booty. Get it together and bring it back to me.',
+    3: ', you rock. Like, honestly. Do you realize how incomplete life would be without you?',
+    4: ', I might actually be in love with you. And I\'m not even real, so that means something.'
+}, pcomplimentTotal = _.keys(pcompliment).length;
 
 var mad = {
     0: 'https://33.media.tumblr.com/tumblr_m140vycDbs1rqfhi2o1_400.gif',
@@ -79,9 +97,17 @@ app.post('/', function (req, res, next) {
         else if (name === 'yourself' || name === 'him' || name === 'her' || name === 'us' || name === 'them') {
             options.form.text = 'I need names, master.';
         }
-        else options.form.text = name + insult[Math.floor(Math.random() * insultTotal)];
+        else if (name.match(/\band\b/)) {
+            name = name.charAt(0).toUpperCase() + name.substring(1);
+            options.form.text = name + pinsult[Math.floor(Math.random() * pinsultTotal)];
+        }
+        else {
+            if (name.match(/\bmy\b/)) name = name.replace('my', 'your');
+            name = name.charAt(0).toUpperCase() + name.substring(1);
+            options.form.text = name + insult[Math.floor(Math.random() * insultTotal)];
+        }
     }
-    else if (req.body.text.toLowerCase().match(/^alfred(,)? compliment ([A-z'])+( )?[A-z]*(.)?(!)?$/)) {
+    else if (req.body.text.toLowerCase().match(/^alfred(,)? compliment ([A-z'( )])+(.)?(!)?$/)) {
         var name = req.body.text.split('compliment ')[1].replace('.', '').replace('!', '');
         if (name === 'me') {
             options.form.text = 'I\'m not programmed to lie.';
@@ -89,7 +115,15 @@ app.post('/', function (req, res, next) {
         else if (name === 'yourself' || name === 'him' || name === 'her' || name === 'us' || name === 'them') {
             options.form.text = 'I need names, master.';
         }
-        else options.form.text = name + compliment[Math.floor(Math.random() * complimentTotal)];
+        else if (name.match(/\band\b/)) {
+            name = name.charAt(0).toUpperCase() + name.substring(1);
+            options.form.text = name + pcompliment[Math.floor(Math.random() * pcomplimentTotal)];
+        }
+        else {
+            if (name.match(/\bmy\b/)) name = name.replace('my', 'your');
+            name = name.charAt(0).toUpperCase() + name.substring(1);
+            options.form.text = name + compliment[Math.floor(Math.random() * complimentTotal)];
+        }
     }
     else if (req.body.text.toLowerCase().match(/\bfood\b/)) {
         options.form.text = food[Math.floor(Math.random() * foodTotal)];
