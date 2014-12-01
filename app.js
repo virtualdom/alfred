@@ -38,6 +38,16 @@ var insult = {
     6: ', can you please stop? Just stop.'
 }, insultTotal = _.keys(insult).length;
 
+var pinsult = {
+    0: ' is a booty.',
+    1: ' smells like booty.',
+    2: ' looks like booty.',
+    3: ' has a big booty. Wait, that\'s a compliment...',
+    4: ' probably tastes like a donkey booty.',
+    5: ', something about you really makes me want to walk into traffic.',
+    6: ', can you please stop? Just stop.'
+}, pinsultTotal = _.keys(pinsult).length;
+
 var compliment = {
     0: ', you have the most beautiful eyes. And booty.',
     1: ' has a booty that is absolutely to die for.',
@@ -87,7 +97,15 @@ app.post('/', function (req, res, next) {
         else if (name === 'yourself' || name === 'him' || name === 'her' || name === 'us' || name === 'them') {
             options.form.text = 'I need names, master.';
         }
-        else options.form.text = name + insult[Math.floor(Math.random() * insultTotal)];
+        else if (name.match(/\band\b/)) {
+            name = name.charAt(0).toUpperCase() + name.substring(1);
+            options.form.text = name + pinsult[Math.floor(Math.random() * pinsultTotal)];
+        }
+        else {
+            if (name.match(/\bmy\b/)) name = name.replace('my', 'your');
+            name = name.charAt(0).toUpperCase() + name.substring(1);
+            options.form.text = name + insult[Math.floor(Math.random() * insultTotal)];
+        }
     }
     else if (req.body.text.toLowerCase().match(/^alfred(,)? compliment ([A-z'( )])+(.)?(!)?$/)) {
         var name = req.body.text.split('compliment ')[1].replace('.', '').replace('!', '');
