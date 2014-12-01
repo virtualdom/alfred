@@ -104,7 +104,8 @@ app.post('/', function (req, res, next) {
         else {
             if (name.match(/\bmy\b/)) name.replace('my', 'your');
             name = name.charAt(0).toUpperCase() + name.substring(1);
-            options.form.text = name + compliment[Math.floor(Math.random() * complimentTotal)];
+            options.form.text = 'booty';
+            // options.form.text = name + compliment[Math.floor(Math.random() * complimentTotal)];
         }
     }
     else if (req.body.text.toLowerCase().match(/\bfood\b/)) {
