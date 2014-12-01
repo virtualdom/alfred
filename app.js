@@ -81,7 +81,7 @@ app.post('/', function (req, res, next) {
         }
         else options.form.text = name + insult[Math.floor(Math.random() * insultTotal)];
     }
-    else if (req.body.text.toLowerCase().match(/^alfred(,)? compliment ([A-z'])+( )?[A-z]*(.)?(!)?$/)) {
+    else if (req.body.text.toLowerCase().match(/^alfred(,)? compliment ([A-z'( )])+(.)?(!)?$/)) {
         var name = req.body.text.split('compliment ')[1].replace('.', '').replace('!', '');
         if (name === 'me') {
             options.form.text = 'I\'m not programmed to lie.';
