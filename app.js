@@ -104,7 +104,6 @@ app.post('/', function (req, res, next) {
         else {
             if (name.match(/\bmy\b/)) name = name.replace('my', 'your');
             name = name.charAt(0).toUpperCase() + name.substring(1);
-            // options.form.text = 'booty';
             options.form.text = name + compliment[Math.floor(Math.random() * complimentTotal)];
         }
     }
