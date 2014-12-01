@@ -102,7 +102,7 @@ app.post('/', function (req, res, next) {
             options.form.text = name + pcompliment[Math.floor(Math.random() * pcomplimentTotal)];
         }
         else {
-            if (name.match(/\bmy\b/)) name.replace('my', 'your');
+            if (name.match(/\bmy\b/)) name = name.replace('my', 'your');
             name = name.charAt(0).toUpperCase() + name.substring(1);
             options.form.text = name + compliment[Math.floor(Math.random() * complimentTotal)];
         }
