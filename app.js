@@ -8,8 +8,8 @@ var right = require('./resources/right.json'), rightTotal = _.keys(right).length
 var insult = require('./resources/insult.json').single, insultTotal = _.keys(insult).length;
 var pinsult = require('./resources/insult.json').plural, pinsultTotal = _.keys(pinsult).length;
 var compliment = require('./resources/compliment.json').single, complimentTotal = _.keys(compliment).length;
-var pcompliment = require('.resources/compliment.json').plural, pcomplimentTotal = _.keys(pcompliment).length;
-var mad = require('.resources/mad.json'), madTotal = _.keys(mad).length;
+var pcompliment = require('./resources/compliment.json').plural, pcomplimentTotal = _.keys(pcompliment).length;
+var mad = require('./resources/mad.json'), madTotal = _.keys(mad).length;
 
 var app = express();
 app.use(bodyParser.urlencoded({ extended: false }))
