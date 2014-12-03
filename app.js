@@ -2,72 +2,20 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var _ = require('underscore');
 
+var byeResponses = require('./resources/bye.json'), byeTotal = _.keys(byeResponses).length;
+var food = require('./resources/food.json'), foodTotal = _.keys(food).length;
+var right = require('./resources/right.json'), rightTotal = _.keys(right).length;
+var insult = require('./resources/insult.json').single, insultTotal = _.keys(insult).length;
+var pinsult = require('./resources/insult.json').plural, pinsultTotal = _.keys(pinsult).length;
+var compliment = require('./resources/compliment.json').single, complimentTotal = _.keys(compliment).length;
+var pcompliment = require('.resources/compliment.json').plural, pcomplimentTotal = _.keys(pcompliment).length;
+var mad = require('.resources/mad.json'), madTotal = _.keys(mad).length;
+
 var app = express();
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
 var shutup = false, shutupClock,count = 0;
-
-var byeResponses = {
-    0: 'http://24.media.tumblr.com/707eac01118e23238a3875eb86cbb447/tumblr_myy1wf8IVG1rcny7ko1_250.gif',
-    1: '...very well, master.',
-    2: 'I believe I\'ve had it with you. Good day.'
-}, byeTotal = _.keys(byeResponses).length;
-
-var food = {
-    0: 'Mmm... food... I do like a good liverwurst.',
-    1: 'Did somebody say food? Master Chachi makes an excellent omelette. Indubitably!',
-    2: 'Don\'t talk about food! If Master Dom hears, there\'ll be none left!',
-    3: 'Did I hear food? I believe Steak n Shake is open 24 hours!'
-}, foodTotal = _.keys(food).length;
-
-var right = {
-    0: 'Indubitably, master.',
-    1: 'Er, I suppose so.',
-    2: 'In all my travels through the Himalayas, I\'ve never encountered a person with logic as sound as that!',
-    3: 'Quite so! But what do I know? I\'m not even real. I don\'t even know what a Pop Tart is.'
-}, rightTotal = _.keys(right).length;
-
-var insult = {
-    0: ' is a booty.',
-    1: ' smells like booty.',
-    2: ' looks like booty.',
-    3: ' has a big booty. Wait, that\'s a compliment...',
-    4: ' probably tastes like a donkey booty.',
-    5: ', something about you really makes me want to walk into traffic.',
-    6: ', can you please stop? Just stop.'
-}, insultTotal = _.keys(insult).length;
-
-var pinsult = {
-    0: ' is a booty.',
-    1: ' smells like booty.',
-    2: ' looks like booty.',
-    3: ' has a big booty. Wait, that\'s a compliment...',
-    4: ' probably tastes like a donkey booty.',
-    5: ', something about you really makes me want to walk into traffic.',
-    6: ', can you please stop? Just stop.'
-}, pinsultTotal = _.keys(pinsult).length;
-
-var compliment = {
-    0: ', you have the most beautiful eyes. And booty.',
-    1: ' has a booty that is absolutely to die for.',
-    2: ' is Miss New Booty. Get it together and bring it back to me.',
-    3: ', you rock. Like, honestly. Do you realize how incomplete life would be without you?',
-    4: ', I might actually be in love with you. And I\'m not even real, so that means something.'
-}, complimentTotal = _.keys(compliment).length;
-
-var pcompliment = {
-    0: ', you have the most beautiful eyes. And booty.',
-    1: ' has a booty that is absolutely to die for.',
-    2: ' is Miss New Booty. Get it together and bring it back to me.',
-    3: ', you rock. Like, honestly. Do you realize how incomplete life would be without you?',
-    4: ', I might actually be in love with you. And I\'m not even real, so that means something.'
-}, pcomplimentTotal = _.keys(pcompliment).length;
-
-var mad = {
-    0: 'https://33.media.tumblr.com/tumblr_m140vycDbs1rqfhi2o1_400.gif',
-    1: 'Whoa, master, please control yourself.'
-}, madTotal = _.keys(mad).length;
 
 app.post('/', function (req, res, next) {
     if (req.body.user_id === '174939' || (shutup && req.body.text.toLowerCase() !== 'alfred')) {
