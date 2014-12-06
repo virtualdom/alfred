@@ -37,7 +37,7 @@ app.post('/', function (req, res, next) {
     }
     else if (req.body.text.toLowerCase().match(/lolol/))
         options.form.text = 'Out loud out loud!';
-    else if (req.body.text.toLowerCase().match(/^alfred(,)? insult ([A-z'])+( )?[A-z]*(.)?(!)?$/)) {
+    else if (req.body.text.toLowerCase().match(/^alfred(,)? insult ([A-z'( )])+(.)?(!)?$/)) {
         var name = req.body.text.split('insult ')[1].replace('.', '').replace('!', '');
         if (name === 'me') {
             options.form.text = '...what? What kind of weird junk are you into?';
