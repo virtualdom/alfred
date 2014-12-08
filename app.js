@@ -1,5 +1,7 @@
-var express = require('express');
 var bodyParser = require('body-parser');
+var express = require('express');
+var request = require('request');
+var S = require('string');
 var _ = require('underscore');
 
 var byeResponses = require('./resources/bye.json'), byeTotal = byeResponses.length;
@@ -14,6 +16,17 @@ var mad = require('./resources/mad.json'), madTotal = mad.length;
 var app = express();
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
+
+request.get('http://peoplearenice.blogspot.com/p/compliment-list.html', function (err, r, html) {
+    if (err) return next (err);
+
+    html.match(/<span style="font-family: Georgia, 'Times New Roman', serif;">[0-9]+\..+\n/g).forEach(function(line){
+        var c = S(line).stripTags().s.trim().replace(/^[0-9]+\. /, '');
+        c = c.match(/^I('[a-z]+)?\b/) ? c : c.charAt(0).toLowerCase() + c.substring(1);
+        compliment.push(', ' + c);
+    });
+    complimentTotal = compliment.length;
+});
 
 var shutup = false, shutupClock, count = 0;
 
@@ -99,7 +112,7 @@ app.post('/', function (req, res, next) {
 
     res.send();
     setTimeout(function () {
-        require('request').post(options);
+        request.post(options);
     }, 1000);
 });
 
