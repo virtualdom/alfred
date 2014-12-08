@@ -1,20 +1,20 @@
 {
-    "single": {
-    "0": " is a booty.",
-    "1": " smells like booty.",
-    "2": " looks like booty.",
-    "3": " has a big booty. Wait, that's a compliment...",
-    "4": " probably tastes like a donkey booty.",
-    "5": ", something about you really makes me want to walk into traffic.",
-    "6": ", can you please stop? Just stop."
-    },
-    "plural": {
-        "0": " is a booty.",
-        "1": " smells like booty.",
-        "2": " looks like booty.",
-        "3": " has a big booty. Wait, that's a compliment...",
-        "4": " probably tastes like a donkey booty.",
-        "5": ", something about you really makes me want to walk into traffic.",
-        "6": ", can you please stop? Just stop."
-    }
+    "single": [
+        " is a booty.",
+        " smells like booty.",
+        " looks like booty.",
+        " has a big booty. Wait, that's a compliment...",
+        " probably tastes like a donkey booty.",
+        ", something about you really makes me want to walk into traffic.",
+        ", can you please stop? Just stop."
+    ],
+    "plural": [
+        " is a booty.",
+        " smells like booty.",
+        " looks like booty.",
+        " has a big booty. Wait, that's a compliment...",
+        " probably tastes like a donkey booty.",
+        ", something about you really makes me want to walk into traffic.",
+        ", can you please stop? Just stop."
+    ]
 }

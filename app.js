@@ -2,20 +2,20 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var _ = require('underscore');
 
-var byeResponses = require('./resources/bye.json'), byeTotal = _.keys(byeResponses).length;
-var food = require('./resources/food.json'), foodTotal = _.keys(food).length;
-var right = require('./resources/right.json'), rightTotal = _.keys(right).length;
-var insult = require('./resources/insult.json').single, insultTotal = _.keys(insult).length;
-var pinsult = require('./resources/insult.json').plural, pinsultTotal = _.keys(pinsult).length;
-var compliment = require('./resources/compliment.json').single, complimentTotal = _.keys(compliment).length;
-var pcompliment = require('./resources/compliment.json').plural, pcomplimentTotal = _.keys(pcompliment).length;
-var mad = require('./resources/mad.json'), madTotal = _.keys(mad).length;
+var byeResponses = require('./resources/bye.json'), byeTotal = byeResponses.length;
+var food = require('./resources/food.json'), foodTotal = food.length;
+var right = require('./resources/right.json'), rightTotal = right.length;
+var insult = require('./resources/insult.json').single, insultTotal = insult.length;
+var pinsult = require('./resources/insult.json').plural, pinsultTotal = pinsult.length;
+var compliment = require('./resources/compliment.json').single, complimentTotal = compliment.length;
+var pcompliment = require('./resources/compliment.json').plural, pcomplimentTotal = pcompliment.length;
+var mad = require('./resources/mad.json'), madTotal = mad.length;
 
 var app = express();
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
-var shutup = false, shutupClock,count = 0;
+var shutup = false, shutupClock, count = 0;
 
 app.post('/', function (req, res, next) {
     if (req.body.user_id === '174939' || (shutup && req.body.text.toLowerCase() !== 'alfred')) {
