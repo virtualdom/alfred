@@ -95,6 +95,10 @@ app.post('/', function (req, res, next) {
     else if (req.body.text.toLowerCase().match(/\bfood\b/)) {
         options.form.text = food[Math.floor(Math.random() * foodTotal)];
     }
+    else if (req.body.text.toLowerCase().match(/^alfred(,)? say .*$/)) {
+        var say = req.body.text.split('say ')[1].trim();
+        options.form.text = say.charAt(0).toUpperCase() + say.substring(1);
+    }
     else if (req.body.text.toLowerCase().match(/\bmad\b/)) {
         options.form.text = mad[Math.floor(Math.random() * madTotal)];
     }
