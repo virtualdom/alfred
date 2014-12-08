@@ -35,42 +35,47 @@ app.post('/', function (req, res, next) {
         clearTimeout(shutupClock);
         options.form.text = 'Yes?';
     }
-    else if (req.body.text.toLowerCase().match(/lolol/))
-        options.form.text = 'Out loud out loud!';
-    else if (req.body.text.toLowerCase().match(/^alfred(,)? insult ([A-z'( )])+(.)?(!)?$/)) {
-        var name = req.body.text.split('insult ')[1].replace('.', '').replace('!', '');
-        if (name === 'me') {
-            options.form.text = '...what? What kind of weird junk are you into?';
-        }
-        else if (name === 'yourself' || name === 'him' || name === 'her' || name === 'us' || name === 'them') {
-            options.form.text = 'I need names, master.';
-        }
-        else if (name.match(/\band\b/)) {
-            name = name.charAt(0).toUpperCase() + name.substring(1);
-            options.form.text = name + pinsult[Math.floor(Math.random() * pinsultTotal)];
+
+    else if (req.body.text.toLowerCase().match(/lolol/)) options.form.text = 'Out loud out loud!';
+
+    else if (req.body.text.toLowerCase().match(/^alfred(,)? (compliment|insult) ([A-z'( )])+(.)?(!)?$/)) {
+        var response, responseLength, split;
+        if (req.body.text.toLowerCase().match(/\bcompliment\b/)) {
+            split = 'compliment ';
+            if (req.body.text.toLowerCase().match(/\band\b/)) {
+                response = pcompliment;
+                responseLength = pcomplimentTotal;
+            }
+            else {
+                response = compliment;
+                responseLength = complimentTotal;
+            }
         }
         else {
-            if (name.match(/\bmy\b/)) name = name.replace('my', 'your');
-            name = name.charAt(0).toUpperCase() + name.substring(1);
-            options.form.text = name + insult[Math.floor(Math.random() * insultTotal)];
+            split = 'insult ';
+            if (req.body.text.toLowerCase().match(/\band\b/)) {
+                response = pinsult;
+                responseLength = pinsultTotal;
+            }
+            else {
+                response = insult;
+                responseLength = insultTotal;
+            }
         }
-    }
-    else if (req.body.text.toLowerCase().match(/^alfred(,)? compliment ([A-z'( )])+(.)?(!)?$/)) {
-        var name = req.body.text.split('compliment ')[1].replace('.', '').replace('!', '');
+
+        var name = req.body.text.split(split)[1].replace('.', '').replace('!', '').trim();
+
         if (name === 'me') {
             options.form.text = 'I\'m not programmed to lie.';
         }
-        else if (name === 'yourself' || name === 'him' || name === 'her' || name === 'us' || name === 'them') {
+        else if (name === 'yourself' || name === 'I' || name === 'him' || name === 'her' || name === 'us' || name === 'them') {
             options.form.text = 'I need names, master.';
-        }
-        else if (name.match(/\band\b/)) {
-            name = name.charAt(0).toUpperCase() + name.substring(1);
-            options.form.text = name + pcompliment[Math.floor(Math.random() * pcomplimentTotal)];
         }
         else {
             if (name.match(/\bmy\b/)) name = name.replace('my', 'your');
             name = name.charAt(0).toUpperCase() + name.substring(1);
-            options.form.text = name + compliment[Math.floor(Math.random() * complimentTotal)];
+
+            options.form.text = name + response[Math.floor(Math.random() * responseLength)];
         }
     }
     else if (req.body.text.toLowerCase().match(/\bfood\b/)) {
