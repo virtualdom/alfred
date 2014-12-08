@@ -50,6 +50,7 @@ app.post('/', function (req, res, next) {
     }
 
     else if (req.body.text.toLowerCase().match(/lolol/)) options.form.text = 'Out loud out loud!';
+    else if (req.body.text.toLowerCase().match(/thank(s| you)(,)? alfred[\.!\?]?/)) options.form.text = 'You are quite welcome, master.';
 
     else if (req.body.text.toLowerCase().match(/^alfred(,)? (compliment|insult) ([A-z'( )])+(.)?(!)?$/)) {
         var response, responseLength, split;
