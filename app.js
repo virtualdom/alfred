@@ -92,9 +92,8 @@ app.post('/', function (req, res, next) {
     }
     else return next();
 
-
+    res.send();
     require('request').post(options);
-    return next();
 });
 
 app.listen(process.env.PORT || 8666);
