@@ -93,7 +93,9 @@ app.post('/', function (req, res, next) {
     else return next();
 
     res.send();
-    require('request').post(options);
+    setTimeout(function () {
+        require('request').post(options);
+    }, 1000);
 });
 
 app.listen(process.env.PORT || 8666);
