@@ -38,10 +38,15 @@ app.post('/', function (req, res, next) {
     var options = {
         url: 'https://api.groupme.com/v3/bots/post',
         method: 'POST',
-        form: {
-            'bot_id': '23d0b4561b9693e82424f9be63'
-        }
+        form: {}
     };
+
+    switch (req.body.group_id) {
+        case '7771805': options.form.bot_id = '23d0b4561b9693e82424f9be63'; break;
+        case '11248555': options.form.bot_id = 'eeaab94daaef6eff88e1b3b68d'; break;
+        case '10059220': options.form.bot_id = '8db834f2d43673052c39a713a2'; break;
+        default: options.form.bot_id = 'eeaab94daaef6eff88e1b3b68d';
+    }
 
     if (req.body.text.toLowerCase() === 'alfred') {
         shutup = false;
