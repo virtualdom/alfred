@@ -31,7 +31,7 @@ request.get('http://peoplearenice.blogspot.com/p/compliment-list.html', function
 var shutup = false, shutupClock, count = 0;
 
 app.post('/', function (req, res, next) {
-    if (req.body.user_id === '174939' || (shutup && req.body.text.toLowerCase() !== 'alfred')) {
+    if (req.body.name === 'Alfred' || (shutup && req.body.text.toLowerCase() !== 'alfred')) {
         return next();
     }
 
