@@ -50,6 +50,16 @@ app.post('/', function (req, res, next) {
     }
 
     else if (req.body.text.toLowerCase().match(/lolol/)) options.form.text = 'Out loud out loud!';
+    else if (req.body.text.toLowerCase().match(/alfred(,)? pug me/)) {
+        request.get('http://pugme.herokuapp.com/random', function (err, r, b) {
+            if (err) return next (err);
+
+            options.form.text = JSON.parse(b).pug;
+            setTimeout(function () {
+                request.post(options);
+            }, 1000);
+        });
+    }
     else if (req.body.text.toLowerCase().match(/thank(s| you)(,)? alfred[\.!\?]?/)) options.form.text = 'You are quite welcome, master.';
     else if (req.body.text.toLowerCase().match(/i('m| am) [A-z( )]*bored/)) options.form.text = 'Shut up, Dom.';
 
@@ -117,9 +127,11 @@ app.post('/', function (req, res, next) {
     else return next();
 
     res.send();
-    setTimeout(function () {
-        request.post(options);
-    }, 1000);
+    if (!req.body.text.toLowerCase().match(/alfred(,)? pug me/)) {
+        setTimeout(function () {
+            request.post(options);
+        }, 1000);
+    }
 });
 
 app.listen(process.env.PORT || 8666);
