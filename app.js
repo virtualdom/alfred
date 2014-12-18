@@ -27,10 +27,17 @@ request.get('http://peoplearenice.blogspot.com/p/compliment-list.html', function
     complimentTotal = reply.compliment.length;
 });
 
-var shutup = false, shutupClock, count = 0;
+var shutup = {
+    '7771805': false,
+    '11248555': false,
+    '10059220': false
+};
+
+var shutupClock = {};
+var count = 0;
 
 app.post('/', function (req, res, next) {
-    if (req.body.name === 'Alfred' || (shutup && req.body.text.toLowerCase() !== 'alfred')) {
+    if (req.body.name === 'Alfred' || (shutup[req.body.group_id] && req.body.text.toLowerCase() !== 'alfred')) {
         return next();
     }
 
@@ -48,8 +55,8 @@ app.post('/', function (req, res, next) {
     }
 
     if (req.body.text.toLowerCase() === 'alfred') {
-        shutup = false;
-        clearTimeout(shutupClock);
+        shutup[req.body.group_id] = false;
+        clearTimeout(shutupClock[req.body.group_id]);
         options.form.text = 'Yes?';
     }
 
@@ -110,8 +117,8 @@ app.post('/', function (req, res, next) {
     }
     else if (req.body.text.toLowerCase().match(/\balfred(,)? shut( )?up\b/) || req.body.text.toLowerCase().match(/\bshut( )?up(,)? alfred\b/)) {
         options.form.text = reply.bye[Math.floor(Math.random() * byeTotal)];
-        shutup = true;
-        shutupClock = setTimeout(function(){shutup = false;}, 3600000);
+        shutup[req.body.group_id] = true;
+        shutupClock[req.body.group_id] = setTimeout(function(){shutup[req.body.group_id] = false;}, 3600000);
     }
     else if (req.body.text.toLowerCase().match(/^right(,)? alfred(\?)?/)) {
         options.form.text = reply.right[Math.floor(Math.random() * rightTotal)];
