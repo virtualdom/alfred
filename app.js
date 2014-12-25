@@ -39,7 +39,7 @@ var count = 0;
 app.post('/', function (req, res, next) {
     req.body.text = req.body.text.toLowerCase();
 
-    if (req.body.name === 'Alfred' || (shutup[req.body.group_id] && req.body.text !== 'alfred')) {
+    if (req.body.name === 'Alfred' || (shutup[req.body.group_id] && req.body.text.match(/^alfred[.!?]?$/))) {
         return next();
     }
 
