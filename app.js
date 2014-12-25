@@ -39,7 +39,7 @@ var count = 0;
 app.post('/', function (req, res, next) {
     req.body.text = req.body.text.toLowerCase();
 
-    if (req.body.name === 'Alfred' || (shutup[req.body.group_id] && req.body.text.match(/^alfred[.!?]?$/))) {
+    if (req.body.name === 'Alfred' || (shutup[req.body.group_id] && !req.body.text.match(/^alfred[.!?]?$/))) {
         return next();
     }
 
@@ -56,7 +56,7 @@ app.post('/', function (req, res, next) {
         default: options.form.bot_id = 'eeaab94daaef6eff88e1b3b68d';
     }
 
-    if (req.body.text === 'alfred') {
+    if (req.body.text.match(/^alfred[.!?]?$/)) {
         shutup[req.body.group_id] = false;
         clearTimeout(shutupClock[req.body.group_id]);
         options.form.text = 'Yes?';
