@@ -37,7 +37,9 @@ var shutupClock = {};
 var count = 0;
 
 app.post('/', function (req, res, next) {
-    if (req.body.name === 'Alfred' || (shutup[req.body.group_id] && req.body.text.toLowerCase() !== 'alfred')) {
+    req.body.text = req.body.text.toLowerCase();
+
+    if (req.body.name === 'Alfred' || (shutup[req.body.group_id] && req.body.text !== 'alfred')) {
         return next();
     }
 
@@ -54,14 +56,14 @@ app.post('/', function (req, res, next) {
         default: options.form.bot_id = 'eeaab94daaef6eff88e1b3b68d';
     }
 
-    if (req.body.text.toLowerCase() === 'alfred') {
+    if (req.body.text === 'alfred') {
         shutup[req.body.group_id] = false;
         clearTimeout(shutupClock[req.body.group_id]);
         options.form.text = 'Yes?';
     }
 
-    else if (req.body.text.toLowerCase().match(/lolol/)) options.form.text = 'Out loud out loud!';
-    else if (req.body.text.toLowerCase().match(/alfred(,)? pug me/)) {
+    else if (req.body.text.match(/lolol/)) options.form.text = 'Out loud out loud!';
+    else if (req.body.text.match(/alfred(,)? pug me/)) {
         request.get('http://pugme.herokuapp.com/random', function (err, r, b) {
             if (err) return next (err);
 
@@ -71,12 +73,12 @@ app.post('/', function (req, res, next) {
             }, 1000);
         });
     }
-    else if (req.body.text.toLowerCase().match(/thank(s| you)(,)? alfred[\.!\?]?/)) options.form.text = 'You are quite welcome, master.';
-    else if (req.body.text.toLowerCase().match(/i('m| am) [A-z( )]*bored/)) options.form.text = 'Shut up, Dom.';
+    else if (req.body.text.match(/thank(s| you)(,)? alfred[\.!\?]?/)) options.form.text = 'You are quite welcome, master.';
+    else if (req.body.text.match(/i('m| am) [A-z( )]*bored/)) options.form.text = 'Shut up, Dom.';
 
-    else if (req.body.text.toLowerCase().match(/^alfred(,)? (compliment|insult) ([A-z'( )])+(.)?(!)?$/)) {
+    else if (req.body.text.match(/^alfred(,)? (compliment|insult) ([A-z'( )])+(.)?(!)?$/)) {
         var response, responseLength, split;
-        if (req.body.text.toLowerCase().match(/\bcompliment\b/)) {
+        if (req.body.text.match(/\bcompliment\b/)) {
             split = 'compliment ';
             response = reply.compliment;
             responseLength = complimentTotal;
@@ -102,31 +104,31 @@ app.post('/', function (req, res, next) {
             options.form.text = name + response[Math.floor(Math.random() * responseLength)];
         }
     }
-    else if (req.body.text.toLowerCase().match(/\bfood\b/)) {
+    else if (req.body.text.match(/\bfood\b/)) {
         options.form.text = reply.food[Math.floor(Math.random() * foodTotal)];
     }
-    else if (req.body.text.toLowerCase().match(/^alfred(,)? say .*$/)) {
+    else if (req.body.text.match(/^alfred(,)? say .*$/)) {
         var say = req.body.text.split('say ')[1].trim();
         options.form.text = say.charAt(0).toUpperCase() + say.substring(1);
     }
-    else if (req.body.text.toLowerCase().match(/\bmad\b/)) {
+    else if (req.body.text.match(/\bmad\b/)) {
         options.form.text = reply.mad[Math.floor(Math.random() * madTotal)];
     }
-    else if (req.body.text.toLowerCase().match(/\bwe should (do|go)\b/)) {
+    else if (req.body.text.match(/\bwe should (do|go)\b/)) {
         if (!(count++ % 5)) options.form.text = 'What a splendid idea! Count me in! Oh wait, I\'m not real.';
     }
-    else if (req.body.text.toLowerCase().match(/\balfred(,)? shut( )?up\b/) || req.body.text.toLowerCase().match(/\bshut( )?up(,)? alfred\b/)) {
+    else if (req.body.text.match(/\balfred(,)? shut( )?up\b/) || req.body.text.match(/\bshut( )?up(,)? alfred\b/)) {
         options.form.text = reply.bye[Math.floor(Math.random() * byeTotal)];
         shutup[req.body.group_id] = true;
         shutupClock[req.body.group_id] = setTimeout(function(){shutup[req.body.group_id] = false;}, 3600000);
     }
-    else if (req.body.text.toLowerCase().match(/^right(,)? alfred(\?)?/)) {
+    else if (req.body.text.match(/^right(,)? alfred(\?)?/)) {
         options.form.text = reply.right[Math.floor(Math.random() * rightTotal)];
     }
     else return next();
 
     res.send();
-    if (!req.body.text.toLowerCase().match(/alfred(,)? pug me/)) {
+    if (!req.body.text.match(/alfred(,)? pug me/)) {
         setTimeout(function () {
             request.post(options);
         }, 1000);
