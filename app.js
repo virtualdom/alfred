@@ -112,6 +112,13 @@ app.post('/', function (req, res, next) {
         req.reply = say.charAt(0).toUpperCase() + say.substring(1);
         return next();
     }
+    else if (req.body.text.match(/^alfred(,)? derp .*$/)) {
+        var derp = req.body.text.split('derp ')[1].trim();
+        request('http://ermahgerd.herokuapp.com/ternslert?value=' + derp, function(e, r, b){
+            req.reply = JSON.parse(b).value;
+            return next();
+        });
+    }
     else if (req.body.text.match(/\bmad\b/)) {
         req.reply = reply.mad[Math.floor(Math.random() * madTotal)];
         return next();
