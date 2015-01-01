@@ -30,7 +30,8 @@ request.get('http://peoplearenice.blogspot.com/p/compliment-list.html', function
 var shutup = {
     '7771805': false,
     '11248555': false,
-    '10059220': false
+    '10059220': false,
+    '7510782': false
 };
 
 var shutupClock = {};
@@ -157,6 +158,7 @@ app.use(function (req, res, next) {
         case '7771805': options.form.bot_id = '23d0b4561b9693e82424f9be63'; break;
         case '11248555': options.form.bot_id = 'eeaab94daaef6eff88e1b3b68d'; break;
         case '10059220': options.form.bot_id = '8db834f2d43673052c39a713a2'; break;
+        case '7510782': options.form.bot_id = 'dff632a96e9dc15450def517b2'; break;
         default: options.form.bot_id = 'eeaab94daaef6eff88e1b3b68d';
     }
 
