@@ -137,6 +137,10 @@ app.post('/', function (req, res, next) {
         req.reply = reply.right[Math.floor(Math.random() * rightTotal)];
         return next();
     }
+    else if (req.body.text.match(/^alfred(,)? help[.!?]?$/)) {
+        req.reply = reply.help;
+        return next();
+    }
     else return res.send();
 });
 
