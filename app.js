@@ -4,13 +4,15 @@ var request = require('request');
 var S = require('string');
 var _ = require('underscore');
 
-var reply = require('./reply.json');
+var reply = require('./resources/reply.json');
+var joke = require('./resources/jokes.json');
 var byeTotal = reply.bye.length;
 var foodTotal = reply.food.length;
 var rightTotal = reply.right.length;
 var insultTotal = reply.insult.length;
 var complimentTotal = reply.compliment.length;
 var madTotal = reply.mad.length;
+var jokeTotal = joke.length;
 
 var app = express();
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -111,6 +113,10 @@ app.post('/', function (req, res, next) {
     else if (req.body.text.match(/^alfred(,)? say .*$/)) {
         var say = req.body.text.split('say ')[1].trim();
         req.reply = say.charAt(0).toUpperCase() + say.substring(1);
+        return next();
+    }
+    else if (req.body.text.match(/^alfred(,)? tell (us |me )?a joke[.!?]?$/)) {
+        req.reply = joke[Math.floor(Math.random() * jokeTotal)];;
         return next();
     }
     else if (req.body.text.match(/^alfred(,)? derp .*$/)) {
