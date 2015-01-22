@@ -40,25 +40,23 @@ var shutupClock = {};
 var count = 0;
 
 app.post('/', function (req, res, next) {
-    req.body.text = req.body.text.toLowerCase();
-
-    if (req.body.name === 'Alfred' || (shutup[req.body.group_id] && !req.body.text.match(/^alfred[.!?]?$/))) {
+    if (req.body.name === 'Alfred' || (shutup[req.body.group_id] && !req.body.text.match(/^alfred[.!?]?$/i))) {
         return next();
     }
 
-    if (req.body.text.match(/^alfred[.!?]?$/)) {
+    if (req.body.text.match(/^alfred[.!?]?$/i)) {
         shutup[req.body.group_id] = false;
         clearTimeout(shutupClock[req.body.group_id]);
         req.reply = 'Yes?';
         return next();
     }
 
-    else if (req.body.text.match(/lolol/)) {
+    else if (req.body.text.match(/lolol/i)) {
         req.reply = 'Out loud out loud!';
         return next();
     }
 
-    else if (req.body.text.match(/alfred(,)? pug me/)) {
+    else if (req.body.text.match(/alfred(,)? pug me/i)) {
         request.get('http://pugme.herokuapp.com/random', function (err, r, b) {
             if (err) return next (err);
 
@@ -67,38 +65,32 @@ app.post('/', function (req, res, next) {
         });
     }
 
-    else if (req.body.text.match(/thank(s| you)(,)? alfred[\.!\?]?/)) {
+    else if (req.body.text.match(/thank(s| you)(,)? alfred[\.!\?]?/i)) {
         req.reply = 'You are quite welcome, master.';
         return next();
     }
 
-    else if (req.body.text.match(/i('m| am) [A-z( )]*bored/)) {
+    else if (req.body.text.match(/i('m| am) [A-z( )]*bored/i)) {
         req.reply = 'Shut up, Dom.';
         return next();
     }
 
-    else if (req.body.text.match(/^alfred(,)? (compliment|insult) ([A-z'( )])+(.)?(!)?$/)) {
+    else if (req.body.text.match(/^alfred(,)? (compliment|insult) ([A-z'( )])+(.)?(!)?$/i)) {
         var response, responseLength, split;
-        if (req.body.text.match(/\bcompliment\b/)) {
-            split = 'compliment ';
-            response = reply.compliment;
-            responseLength = complimentTotal;
-        }
-        else {
-            split = 'insult ';
-            response = reply.insult;
-            responseLength = insultTotal;
-        }
+
+        split = req.body.text.match(/\bcompliment /i) || req.body.text.match(/\binsult /i);
+        split = split[0];
+
+        response = split.match(/\bcompliment /i) ? reply.compliment : reply.insult;
+        responseLength = split.match(/\bcompliment /i) ? complimentTotal : insultTotal;
 
         var name = req.body.text.split(split)[1].replace('.', '').replace('!', '').trim();
 
         if (name === 'me') {
             req.reply = 'I\'m not programmed to lie.';
-        }
-        else if (name === 'yourself' || name === 'I' || name === 'him' || name === 'her' || name === 'us' || name === 'them') {
+        } else if (name === 'yourself' || name === 'I' || name === 'him' || name === 'her' || name === 'us' || name === 'them') {
             req.reply = 'I need names, master.';
-        }
-        else {
+        } else {
             if (name.match(/\bmy\b/)) name = name.replace('my', 'your');
             name = name.charAt(0).toUpperCase() + name.substring(1);
 
@@ -106,45 +98,46 @@ app.post('/', function (req, res, next) {
         }
         return next();
     }
-    else if (req.body.text.match(/\bfood\b/)) {
+
+    else if (req.body.text.match(/\bfood\b/i)) {
         req.reply = reply.food[Math.floor(Math.random() * foodTotal)];
         return next();
     }
-    else if (req.body.text.match(/^alfred(,)? say .*$/)) {
-        var say = req.body.text.split('say ')[1].trim();
+    else if (req.body.text.match(/^alfred(,)? say .*$/i)) {
+        var say = req.body.text.split(req.body.text.match(/\bsay /i)[0])[1].trim();
         req.reply = say.charAt(0).toUpperCase() + say.substring(1);
         return next();
     }
-    else if (req.body.text.match(/^alfred(,)? tell (us |me )?a joke[.!?]?$/)) {
-        req.reply = joke[Math.floor(Math.random() * jokeTotal)];;
+    else if (req.body.text.match(/^alfred(,)? tell (us |me )?a joke[.!?]?$/i)) {
+        req.reply = joke[Math.floor(Math.random() * jokeTotal)];
         return next();
     }
-    else if (req.body.text.match(/^alfred(,)? derp .*$/)) {
-        var derp = req.body.text.split('derp ')[1].trim();
+    else if (req.body.text.match(/^alfred(,)? derp .*$/i)) {
+        var derp = req.body.text.split(req.body.text.match(/\bderp /i)[0])[1].trim();
         request('http://ermahgerd.herokuapp.com/ternslert?value=' + derp, function(e, r, b){
             req.reply = JSON.parse(b).value;
             return next();
         });
     }
-    else if (req.body.text.match(/\bmad\b/)) {
+    else if (req.body.text.match(/\bmad\b/i)) {
         req.reply = reply.mad[Math.floor(Math.random() * madTotal)];
         return next();
     }
-    else if (req.body.text.match(/\bwe should (do|go)\b/)) {
+    else if (req.body.text.match(/\bwe should (do|go)\b/i)) {
         if (!(count++ % 5)) req.reply = 'What a splendid idea! Count me in! Oh wait, I\'m not real.';
         return next();
     }
-    else if (req.body.text.match(/\balfred(,)? shut( )?up\b/) || req.body.text.match(/\bshut( )?up(,)? alfred\b/)) {
+    else if (req.body.text.match(/\balfred(,)? shut( )?up\b/i) || req.body.text.match(/\bshut( )?up(,)? alfred\b/i)) {
         req.reply = reply.bye[Math.floor(Math.random() * byeTotal)];
         shutup[req.body.group_id] = true;
         shutupClock[req.body.group_id] = setTimeout(function(){shutup[req.body.group_id] = false;}, 3600000);
         return next();
     }
-    else if (req.body.text.match(/^right(,)? alfred(\?)?/)) {
+    else if (req.body.text.match(/^right(,)? alfred(\?)?/i)) {
         req.reply = reply.right[Math.floor(Math.random() * rightTotal)];
         return next();
     }
-    else if (req.body.text.match(/^alfred(,)? help[.!?]?$/)) {
+    else if (req.body.text.match(/^alfred(,)? help[.!?]?$/i)) {
         req.reply = reply.help;
         return next();
     }
