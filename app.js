@@ -7,6 +7,7 @@ var _ = require('underscore');
 var reply = require('./resources/reply.json');
 var joke = require('./resources/jokes.json');
 var byeTotal = reply.bye.length;
+var dtfTotal = reply.dtf.length;
 var foodTotal = reply.food.length;
 var rightTotal = reply.right.length;
 var insultTotal = reply.insult.length;
@@ -101,6 +102,10 @@ app.post('/', function (req, res, next) {
 
     else if (req.body.text.match(/\bfood\b/i)) {
         req.reply = reply.food[Math.floor(Math.random() * foodTotal)];
+        return next();
+    }
+    else if (req.body.text.match(/^alfred(,)? dtf[.!?]?$/i)) {
+        req.reply = reply.dtf[Math.floor(Math.random() * dtfTotal)];
         return next();
     }
     else if (req.body.text.match(/^alfred(,)? say .*$/i)) {
