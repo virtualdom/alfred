@@ -6,14 +6,6 @@ var _ = require('underscore');
 
 var reply = require('./resources/reply.json');
 var joke = require('./resources/jokes.json');
-var byeTotal = reply.bye.length;
-var dtfTotal = reply.dtf.length;
-var foodTotal = reply.food.length;
-var rightTotal = reply.right.length;
-var insultTotal = reply.insult.length;
-var complimentTotal = reply.compliment.length;
-var madTotal = reply.mad.length;
-var jokeTotal = joke.length;
 
 var app = express();
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -95,17 +87,17 @@ app.post('/', function (req, res, next) {
             if (name.match(/\bmy\b/)) name = name.replace('my', 'your');
             name = name.charAt(0).toUpperCase() + name.substring(1);
 
-            req.reply = name + response[Math.floor(Math.random() * responseLength)];
+            req.reply = name + _.shuffle(response)[0];
         }
         return next();
     }
 
     else if (req.body.text.match(/\bfood\b/i)) {
-        req.reply = reply.food[Math.floor(Math.random() * foodTotal)];
+        req.reply = _.shuffle(reply.food)[0];
         return next();
     }
     else if (req.body.text.match(/^alfred(,)? dtf[.!?]?$/i)) {
-        req.reply = reply.dtf[Math.floor(Math.random() * dtfTotal)];
+        req.reply = _.shuffle(reply.dtf)[0];
         return next();
     }
     else if (req.body.text.match(/^alfred(,)? say .*$/i)) {
@@ -114,7 +106,7 @@ app.post('/', function (req, res, next) {
         return next();
     }
     else if (req.body.text.match(/^alfred(,)? tell (us |me )?a joke[.!?]?$/i)) {
-        req.reply = joke[Math.floor(Math.random() * jokeTotal)];
+        req.reply = _.shuffle(joke)[0];
         return next();
     }
     else if (req.body.text.match(/^alfred(,)? derp .*$/i)) {
@@ -125,7 +117,7 @@ app.post('/', function (req, res, next) {
         });
     }
     else if (req.body.text.match(/\bmad\b/i)) {
-        req.reply = reply.mad[Math.floor(Math.random() * madTotal)];
+        req.reply = _.shuffle(reply.mad)[0];
         return next();
     }
     else if (req.body.text.match(/\bwe should (do|go)\b/i)) {
@@ -133,13 +125,13 @@ app.post('/', function (req, res, next) {
         return next();
     }
     else if (req.body.text.match(/\balfred(,)? shut( )?up\b/i) || req.body.text.match(/\bshut( )?up(,)? alfred\b/i)) {
-        req.reply = reply.bye[Math.floor(Math.random() * byeTotal)];
+        req.reply = _.shuffle(reply.bye)[0];
         shutup[req.body.group_id] = true;
         shutupClock[req.body.group_id] = setTimeout(function(){shutup[req.body.group_id] = false;}, 3600000);
         return next();
     }
     else if (req.body.text.match(/^right(,)? alfred(\?)?/i)) {
-        req.reply = reply.right[Math.floor(Math.random() * rightTotal)];
+        req.reply = _.shuffle(reply.right)[0];
         return next();
     }
     else if (req.body.text.match(/^alfred(,)? help[.!?]?$/i)) {
