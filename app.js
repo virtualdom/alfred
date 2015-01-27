@@ -65,7 +65,7 @@ app.post('/', function (req, res, next) {
     }
 
     else if (req.body.text.match(/i('m| am) [A-z( )]*bored/i)) {
-        req.reply = 'Shut up, Dom.';
+        req.reply = 'Shut up, ' + req.body.name + '.';
         return next();
     }
 
