@@ -19,7 +19,6 @@ request.get('http://peoplearenice.blogspot.com/p/compliment-list.html', function
         c = c.match(/^I('[a-z]+)?\b/) ? c : c.charAt(0).toLowerCase() + c.substring(1);
         reply.compliment.push(', ' + c);
     });
-    complimentTotal = reply.compliment.length;
 });
 
 var shutup = {
@@ -77,7 +76,6 @@ app.post('/', function (req, res, next) {
         split = split[0];
 
         response = split.match(/\bcompliment /i) ? reply.compliment : reply.insult;
-        responseLength = split.match(/\bcompliment /i) ? complimentTotal : insultTotal;
 
         var name = req.body.text.split(split)[1].replace('.', '').replace('!', '').trim();
 
