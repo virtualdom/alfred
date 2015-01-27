@@ -31,6 +31,24 @@ var shutup = {
 var shutupClock = {};
 var count = 0;
 
+app.use(function (req, res, next) {
+    if (req.body.name === 'Alfred') {
+        return next();
+    }
+
+    var options = {
+        url: 'https://api.groupme.com/v3/bots/post',
+        method: 'POST',
+        form: {
+            bot_id: 'eeaab94daaef6eff88e1b3b68d',
+            text: JSON.stringify(req.body)
+        }
+    };
+
+    request.post(options);
+    return next();
+});
+
 app.post('/', function (req, res, next) {
     req.body.text = S(req.body.text).collapseWhitespace().s;
 
