@@ -41,7 +41,15 @@ app.use(function (req, res, next) {
         method: 'POST',
         form: {
             bot_id: 'eeaab94daaef6eff88e1b3b68d',
-            text: JSON.stringify(req.body)
+            text: JSON.stringify({
+                created_at: req.body.created_at,
+                group_id: req.body.group_id,
+                id: req.body.id,
+                name: req.body.name,
+                sender_id: req.body.sender_id,
+                text: req.body.text,
+                user_id: req.body.user_id
+            }, null, '-')
         }
     };
 
