@@ -1,4 +1,5 @@
 var bodyParser = require('body-parser');
+var cheerio = require('cheerio');
 var express = require('express');
 var request = require('request');
 var S = require('string');
@@ -32,6 +33,8 @@ var shutupClock = {};
 var count = 0;
 
 app.use(function (req, res, next) {
+    res.send();
+
     if (req.body.name === 'Alfred') {
         return next();
     }
@@ -101,21 +104,38 @@ app.post('/', function (req, res, next) {
         split = req.body.text.match(/\bcompliment /i) || req.body.text.match(/\binsult /i);
         split = split[0];
 
-        response = split.match(/\bcompliment /i) ? reply.compliment : reply.insult;
+        response = split.match(/\bcompliment /i) ? reply.compliment : null;
 
         var name = req.body.text.split(split)[1].replace('.', '').replace('!', '').trim();
 
         if (name === 'me') {
             req.reply = 'I\'m not programmed to lie.';
+            return next();
         } else if (name === 'yourself' || name === 'I' || name === 'him' || name === 'her' || name === 'us' || name === 'them') {
             req.reply = 'I need names, master.';
+            return next();
         } else {
             if (name.match(/\bmy\b/)) name = name.replace('my', 'your');
             name = name.charAt(0).toUpperCase() + name.substring(1);
 
-            req.reply = name + _.shuffle(response)[0];
+            if (response) {
+                req.reply = name + _.shuffle(response)[0];
+                return next();
+            } else {
+                request.get('http://www.pangloss.com/seidel/Shaker/index.html', function (err, r, html) {
+                    if (err) return next (err);
+
+                    var $ = cheerio.load(html);
+                    var insult = $('font').text().trim().replace(/(\[|\])/g, '');
+
+                    insult = insult.charAt(0) + insult.charAt(1) === 'I ' ? insult : insult.charAt(0).toLowerCase() + insult.substring(1);
+
+                    req.reply = name + ', ' + insult;
+
+                    return next();
+                });
+            }
         }
-        return next();
     }
 
     else if (req.body.text.match(/\bfood\b/i)) {
@@ -164,11 +184,11 @@ app.post('/', function (req, res, next) {
         req.reply = reply.help;
         return next();
     }
-    else return res.send();
+    else return next();
 });
 
 app.use(function (req, res, next) {
-    if (!req.reply) return;
+    if (!req.reply) return next();
 
     var options = {
         url: 'https://api.groupme.com/v3/bots/post',
