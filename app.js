@@ -88,11 +88,6 @@ app.post('/', function (req, res, next) {
         });
     }
 
-    else if (req.body.text.match(/thank(s| you)(,)? alfred[\.!\?]?/i)) {
-        req.reply = 'You are quite welcome, master.';
-        return next();
-    }
-
     else if (req.body.text.match(/i('m| am) [A-z( )]*bored/i)) {
         req.reply = 'Shut up, ' + req.body.name + '.';
         return next();
@@ -184,6 +179,12 @@ app.post('/', function (req, res, next) {
         req.reply = reply.help;
         return next();
     }
+
+    else if (req.body.text.match(/thank(s| you)(,)? alfred[\.!\?]?/i)) {
+        req.reply = 'You are quite welcome, master.';
+        return next();
+    }
+
     else return next();
 });
 
