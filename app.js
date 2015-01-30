@@ -185,6 +185,11 @@ app.post('/', function (req, res, next) {
         return next();
     }
 
+    else if (req.body.text.match(/(hi|hello|hey|greetings)(,)? alfred[\.!\?]?/i)) {
+        req.reply = 'Why, hello, ' + req.body.name + '.';
+        return next();
+    }
+
     else return next();
 });
 
