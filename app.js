@@ -191,6 +191,11 @@ app.post('/', function (req, res, next) {
         return next();
     }
 
+    else if (req.body.text.match(/alfred(,)? i love you[\.!]?/i) || req.body.text.match(/i love you(,)? alfred[\.!]?/i)) {
+        req.reply = _.shuffle(reply.love)[0];
+        return next();
+    }
+
     else return next();
 });
 
