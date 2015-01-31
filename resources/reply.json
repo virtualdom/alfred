@@ -47,5 +47,20 @@
         "http://www.gifbin.com/bin/052014/1402176591_dog_doesnt_want_to_play_with_frisbee.gif"
     ],
 
+    "love": [
+        "What a coincidence. I love me too!",
+        "That's disgusting only because you're disgusting.",
+        "I'm a program, so that makes no sense to me.",
+        "Sorry, I have a girlfriend.",
+        "So does my mom.",
+        "Why on earth wouldn't you?",
+        "Don't worry, it'll pass.",
+        "Join the club.",
+        "That's awkward because you kind of smell.",
+        "http://makeameme.org/media/created/could-you-not-9czkvo.jpg",
+        "https://cryptanalyst.files.wordpress.com/2010/12/repulsed.jpg",
+        "Olive juice, too."
+    ],
+
     "help": "Commands (for best results, try sending only the command)\n\"Alfred, pug me.\": sends you a pug.\n\"Alfred, compliment/insult <name>.\": Alfred compliments/insults <name>.\n\"Alfred, say <stuff>\": Alfred says what you told him to say.\n\"Alfred, derp <stuff>\": ERLFRERD DERPS WHERT E TERLD HERM TO DERP\n\"Alfred, tell me a joke.\": Alfred, tells a dumb joke.\n\"Alfred, shut up.\": Alfred shuts up for an hour.\n\"Alfred.\": Alfred prematurely ends his shutting up.\n\"Alfred, help.\": Alfred will annoy your friends by sending this list again."
 }
