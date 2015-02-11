@@ -158,6 +158,14 @@ app.post('/', function (req, res, next) {
             return next();
         });
     }
+    else if (req.body.text.match(/^alfred(,)? bible .*$/i)) {
+        var bible = req.body.text.split(req.body.text.match(/\bbible /i)[0])[1].trim();
+
+        request.get('http://labs.bible.org/api/?passage=' + bible, function(e, r, b){
+            req.reply = b.replace(/<b>[0-9:]+<\/b>/, '');
+            return next();
+        });
+    }
     else if (req.body.text.match(/\bmad\b/i)) {
         req.reply = _.shuffle(reply.mad)[0];
         return next();
