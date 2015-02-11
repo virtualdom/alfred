@@ -158,6 +158,40 @@ app.post('/', function (req, res, next) {
             return next();
         });
     }
+    else if (req.body.text.match(/^alfred(,)? bible .*$/i)) {
+        var bible = req.body.text.split(req.body.text.match(/\bbible /i)[0])[1].trim();
+
+        request.get('http://labs.bible.org/api/?passage=' + bible, function(e, r, b){
+            b = b.replace(/<b>[0-9:]+<\/b>/g, '');
+
+            if (b.match(/&#[0-9]+;/g)) {
+                b.match(/&#[0-9]+;/g).forEach(function (el, i) {
+                    b = b.replace(el, String.fromCharCode(el.replace('&#', '').replace(';', '')));
+                });
+            }
+
+            req.reply = b;
+
+            return next();
+        });
+    }
+    else if (req.body.text.match(/^alfred(,)? bible .*$/i)) {
+        var bible = req.body.text.split(req.body.text.match(/\bbible /i)[0])[1].trim();
+
+        request.get('http://labs.bible.org/api/?passage=' + bible, function(e, r, b){
+            b = b.replace(/<b>[0-9:]+<\/b>/g, '');
+
+            if (b.match(/&#[0-9]+;/g)) {
+                b.match(/&#[0-9]+;/g).forEach(function (el, i) {
+                    b = b.replace(el, String.fromCharCode(el.replace('&#', '').replace(';', '')));
+                });
+            }
+
+            req.reply = b;
+
+            return next();
+        });
+    }
     else if (req.body.text.match(/\bmad\b/i)) {
         req.reply = _.shuffle(reply.mad)[0];
         return next();
