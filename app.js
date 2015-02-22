@@ -75,16 +75,31 @@ app.post('/', function (req, res, next) {
         return next();
     }
 
-    else if (req.body.text.match(/lolol/i)) {
-        req.reply = 'Out loud out loud!';
-        return next();
-    }
-
     else if (req.body.text.match(/alfred(,)? pug me/i)) {
         request.get('http://pugme.herokuapp.com/random', function (err, r, b) {
             if (err) return next (err);
 
             req.reply = JSON.parse(b).pug;
+            return next();
+        });
+    }
+
+    else if (req.body.text.match(/alfred(,)? weather [0-9]+[\.!]?$/i)) {
+        var zip = req.body.text.split('weather ')[1].replace('.', '').replace('!', '').trim();
+        request.get('http://api.wunderground.com/api/6700ef73a9135901/forecast/q/' + zip + '.json', function (err, r, b) {
+            if (err) return next (err);
+
+            b = JSON.parse(b);
+
+            if (b.response.error) {
+                req.reply = 'I couldn\'t find any data for that zip code.';
+                return next();
+            }
+
+            req.reply = [];
+            req.reply[0] = b.forecast.txt_forecast.forecastday[0].icon_url;
+            req.reply[1] = b.forecast.txt_forecast.forecastday[0].fcttext + ' High: ' + b.forecast.simpleforecast.forecastday[0].high.fahrenheit + '°F. Low: ' + b.forecast.simpleforecast.forecastday[0].low.fahrenheit + '°F.';
+
             return next();
         });
     }
@@ -134,10 +149,6 @@ app.post('/', function (req, res, next) {
         }
     }
 
-    else if (req.body.text.match(/\bfood\b/i)) {
-        req.reply = _.shuffle(reply.food)[0];
-        return next();
-    }
     else if (req.body.text.match(/^alfred(,)? dtf[.!?]?$/i)) {
         req.reply = _.shuffle(reply.dtf)[0];
         return next();
@@ -196,18 +207,26 @@ app.post('/', function (req, res, next) {
         req.reply = _.shuffle(reply.mad)[0];
         return next();
     }
+    else if (req.body.text.match(/\bfood\b/i)) {
+        req.reply = _.shuffle(reply.food)[0];
+        return next();
+    }
+    else if (req.body.text.match(/lolol/i)) {
+        req.reply = 'Out loud out loud!';
+        return next();
+    }
     else if (req.body.text.match(/\bwe should (do|go)\b/i)) {
         if (!(count++ % 5)) req.reply = 'What a splendid idea! Count me in! Oh wait, I\'m not real.';
+        return next();
+    }
+    else if (req.body.text.match(/^right(,)? alfred(\?)?/i)) {
+        req.reply = _.shuffle(reply.right)[0];
         return next();
     }
     else if (req.body.text.match(/\balfred(,)? shut( )?up\b/i) || req.body.text.match(/\bshut( )?up(,)? alfred\b/i)) {
         req.reply = _.shuffle(reply.bye)[0];
         shutup[req.body.group_id] = true;
         shutupClock[req.body.group_id] = setTimeout(function(){shutup[req.body.group_id] = false;}, 3600000);
-        return next();
-    }
-    else if (req.body.text.match(/^right(,)? alfred(\?)?/i)) {
-        req.reply = _.shuffle(reply.right)[0];
         return next();
     }
     else if (req.body.text.match(/^alfred(,)? help[.!?]?$/i)) {
@@ -250,11 +269,19 @@ app.use(function (req, res, next) {
         default: options.form.bot_id = 'eeaab94daaef6eff88e1b3b68d';
     }
 
-    options.form.text = req.reply;
-
-    setTimeout(function () {
-        request.post(options);
-    }, 1000);
+    if (_.isArray(req.reply)) {
+        _.each(req.reply, function (element, index) {
+            setTimeout(function () {
+                options.form.text = element;
+                request.post(options);
+            }, 1000 * (index + 1));
+        });
+    } else {
+        options.form.text = req.reply;
+        setTimeout(function () {
+            request.post(options);
+        }, 1000);
+    }
 });
 
 app.listen(process.env.PORT || 8666);
