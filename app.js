@@ -96,9 +96,7 @@ app.post('/', function (req, res, next) {
                 return next();
             }
 
-            req.reply = [];
-            req.reply[0] = b.forecast.txt_forecast.forecastday[0].icon_url;
-            req.reply[1] = b.forecast.txt_forecast.forecastday[0].fcttext + ' High: ' + b.forecast.simpleforecast.forecastday[0].high.fahrenheit + '°F. Low: ' + b.forecast.simpleforecast.forecastday[0].low.fahrenheit + '°F.';
+            req.reply = b.forecast.txt_forecast.forecastday[0].fcttext + ' High: ' + b.forecast.simpleforecast.forecastday[0].high.fahrenheit + '°F. Low: ' + b.forecast.simpleforecast.forecastday[0].low.fahrenheit + '°F.';
 
             return next();
         });
