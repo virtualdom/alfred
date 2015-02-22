@@ -23,11 +23,12 @@ request.get('http://peoplearenice.blogspot.com/p/compliment-list.html', function
 });
 
 var shutup = {
-    '7771805': false,
-    '11248555': false,
-    '10059220': false,
-    '12124767': false,
-    '7510782': false
+    '7771805': false, //Yippees
+    '11248555': false, //Faith Group
+    '12530073': false, //Mission Impossible
+    '10059220': false, //Roomies
+    '12124767': false, //North PA guys
+    '7510782': false //Family
 };
 
 var shutupClock = {};
@@ -260,11 +261,12 @@ app.use(function (req, res, next) {
     };
 
     switch (req.body.group_id) {
-        case '7771805': options.form.bot_id = '23d0b4561b9693e82424f9be63'; break;
-        case '10059220': options.form.bot_id = '8db834f2d43673052c39a713a2'; break;
-        case '12124767': options.form.bot_id = '3375c7ff57b4a2a64f9d05a1db'; break;
-        case '7510782': options.form.bot_id = 'dff632a96e9dc15450def517b2'; break;
-        default: options.form.bot_id = 'eeaab94daaef6eff88e1b3b68d';
+        case '7771805': options.form.bot_id = '23d0b4561b9693e82424f9be63'; break; //Yippees
+        case '10059220': options.form.bot_id = '8db834f2d43673052c39a713a2'; break; //Roomies
+        case '12530073': options.form.bot_id = '8299fb952d31c64f04994f1545'; break; //Mission Impossible
+        case '12124767': options.form.bot_id = '3375c7ff57b4a2a64f9d05a1db'; break; //North PA Guys
+        case '7510782': options.form.bot_id = 'dff632a96e9dc15450def517b2'; break; //Family
+        default: options.form.bot_id = 'eeaab94daaef6eff88e1b3b68d'; //Faith Group
     }
 
     if (_.isArray(req.reply)) {
