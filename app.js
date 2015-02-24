@@ -103,6 +103,30 @@ app.post('/', function (req, res, next) {
         });
     }
 
+    else if (req.body.text.match(/alfred(,)? forecast [0-9]+[\.!]?$/i)) {
+        var zip = req.body.text.split('forecast ')[1].replace('.', '').replace('!', '').trim();
+        request.get('http://api.wunderground.com/api/6700ef73a9135901/forecast/q/' + zip + '.json', function (err, r, b) {
+            if (err) return next (err);
+
+            b = JSON.parse(b);
+
+            if (b.response.error) {
+                req.reply = 'I couldn\'t find any data for that zip code.';
+                return next();
+            }
+
+            var days = _.filter(b.forecast.txt_forecast.forecastday, function(epoch){ return !(epoch.title.match(/night$/i)); });
+
+            req.reply = [];
+
+            _.each([0, 1, 2], function (index) {
+                req.reply[index] = days[index].title + ': ' + days[index].fcttext + ' High: ' + b.forecast.simpleforecast.forecastday[index].high.fahrenheit + '°F. Low: ' + b.forecast.simpleforecast.forecastday[index].low.fahrenheit + '°F.';
+            });
+
+            return next();
+        });
+    }
+
     else if (req.body.text.match(/i('m| am) [A-z( )]*bored/i)) {
         req.reply = 'Shut up, ' + req.body.name + '.';
         return next();
