@@ -62,5 +62,5 @@
         "Olive juice, too."
     ],
 
-    "help": "Commands (for best results, try sending only the command)\n\"Alfred, pug me.\"\n\"Alfred, compliment/insult <name>.\"\n\"Alfred, say <stuff>\"\n\"Alfred, derp <stuff>\"\n\"Alfred, tell me a joke.\"\n\"Alfred, shut up.\": Alfred shuts up for an hour.\n\"Alfred.\": Alfred prematurely ends his shutting up.\n\"Alfred, bible <bible verse>\"\n\"Alfred, weather <zip code>\"\n\"Alfred, help.\": Alfred will annoy your friends by sending this list again."
+    "help": "Commands (for best results, try sending only the command)\n\"Alfred, pug me.\"\n\"Alfred, compliment/insult <name>.\"\n\"Alfred, say <stuff>\"\n\"Alfred, derp <stuff>\"\n\"Alfred, tell me a joke.\"\n\"Alfred, shut up.\": Alfred shuts up for an hour.\n\"Alfred.\": Alfred prematurely ends his shutting up.\n\"Alfred, bible <bible verse>\"\n\"Alfred, weather/forecast <zip code>\"\n\"Alfred, help.\": Alfred will annoy your friends by sending this list again."
 }
