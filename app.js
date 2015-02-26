@@ -23,6 +23,7 @@ request.get('http://peoplearenice.blogspot.com/p/compliment-list.html', function
 });
 
 var shutup = {
+    'shakirashakira': false, //My Site
     '7771805': false, //Yippees
     '11248555': false, //Faith Group
     '12530073': false, //Mission Impossible
@@ -35,8 +36,6 @@ var shutupClock = {};
 var count = 0;
 
 app.use(function (req, res, next) {
-    res.send();
-
     if (req.body.name === 'Alfred') {
         return next();
     }
@@ -63,6 +62,7 @@ app.use(function (req, res, next) {
 });
 
 app.post('/', function (req, res, next) {
+    if (!req.body.text) return next();
     req.body.text = S(req.body.text).collapseWhitespace().s;
 
     if (req.body.name === 'Alfred' || (shutup[req.body.group_id] && !req.body.text.match(/^alfred[.!?]?$/i))) {
@@ -276,7 +276,11 @@ app.post('/', function (req, res, next) {
 });
 
 app.use(function (req, res, next) {
-    if (!req.reply) return next();
+    if (!req.reply) {
+        res.send();
+        return next();
+    } else if (req.body.group_id === 'shakirashakira') res.send(req.reply);
+    else res.send();
 
     var options = {
         url: 'https://api.groupme.com/v3/bots/post',
