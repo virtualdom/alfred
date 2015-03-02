@@ -276,6 +276,7 @@ app.post('/', function (req, res, next) {
 });
 
 app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
     if (!req.reply) {
         res.send();
         return next();
