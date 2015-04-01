@@ -182,6 +182,8 @@ app.post('/', function (req, res, next) {
         return next();
     }
     else if (req.body.text.match(/^alfred(,)? spam .*$/i)) {
+        if (req.body.sender_id !== '6454202') return next();
+
         var spam = req.body.text.split(req.body.text.match(/\bspam /i)[0])[1].trim();
         req.reply = [];
         for (var i = 0; i < 20; i++)
