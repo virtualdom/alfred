@@ -234,6 +234,10 @@ app.post('/', function (req, res, next) {
         if (!(count++ % 5)) req.reply = 'What a splendid idea! Count me in! Oh wait, I\'m not real.';
         return next();
     }
+    else if (req.body.text.match(/\bhow (long|often)\b/i)) {
+        req.reply = 'All day, nigga.';
+        return next();
+    }
     else if (req.body.text.match(/^right(,)? alfred(\?)?/i)) {
         req.reply = _.shuffle(reply.right)[0];
         return next();
