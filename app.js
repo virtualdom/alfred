@@ -6,6 +6,7 @@ var S = require('string');
 var _ = require('underscore');
 
 var credentials = require('./credentials.json');
+var shutup = require('./shutup.json');
 var reply = require('./resources/reply.json');
 var joke = require('./resources/jokes.json');
 
@@ -23,14 +24,6 @@ request.get('http://peoplearenice.blogspot.com/p/compliment-list.html', function
     });
 });
 
-var shutup = {
-    'shakirashakira': false, //My Site
-    '7771805': false, //Yippees
-    '11248555': false, //Faith Group
-    '12530073': false, //Mission Impossible
-    '10059220': false, //Roomies
-    '7510782': false //Family
-};
 
 var shutupClock = {};
 var count = 0;
