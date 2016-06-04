@@ -24,12 +24,11 @@ request.get('http://peoplearenice.blogspot.com/p/compliment-list.html', function
     });
 });
 
-
 var shutupClock = {};
 var count = 0;
 
 app.use(function (req, res, next) {
-    if (req.body.name === 'Alfred') {
+    if (req.body.sender_type === 'bot') {
         return next();
     }
 
@@ -58,7 +57,7 @@ app.post('/', function (req, res, next) {
     if (!req.body.text) return next();
     req.body.text = S(req.body.text).collapseWhitespace().s;
 
-    if (req.body.name === 'Alfred' || (shutup[req.body.group_id] && !req.body.text.match(/^alfred[.!?]?$/i))) {
+    if (req.body.sender_type === 'bot' || (shutup[req.body.group_id] && !req.body.text.match(/^alfred[.!?]?$/i))) {
         return next();
     }
 
@@ -163,6 +162,15 @@ app.post('/', function (req, res, next) {
                 });
             }
         }
+    }
+
+    else if (req.body.text.match(/^alfred(,)? giphy .*/i)) {
+        var q = req.body.text.split('giphy ')[1].trim();
+        request('http://api.giphy.com/v1/gifs/random?api_key=' + credentials.giphy + '&tag=' + q, function(e, r, b) {
+            b = JSON.parse(b);
+            req.reply = b.data.image_original_url || 'Sorry, I could not find anything.';
+            return next();
+        });
     }
 
     else if (req.body.text.match(/^alfred(,)? dtf[.!?]?$/i)) {
