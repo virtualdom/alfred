@@ -6,7 +6,6 @@ var S = require('string');
 var _ = require('underscore');
 
 var credentials = require('./credentials.json');
-var shutup = require('./shutup.json');
 var reply = require('./resources/reply.json');
 var joke = require('./resources/jokes.json');
 
@@ -24,6 +23,7 @@ request.get('http://peoplearenice.blogspot.com/p/compliment-list.html', function
     });
 });
 
+var shutup = {};
 var shutupClock = {};
 var count = 0;
 
