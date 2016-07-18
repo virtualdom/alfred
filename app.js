@@ -5,6 +5,7 @@ var request = require('request');
 var S = require('string');
 var _ = require('underscore');
 
+var blacklist = require('./blacklist.json');
 var credentials = require('./credentials.json');
 var reply = require('./resources/reply.json');
 var joke = require('./resources/jokes.json');
@@ -28,7 +29,7 @@ var shutupClock = {};
 var count = 0;
 
 app.use(function (req, res, next) {
-    if (req.body.sender_type === 'bot') {
+    if (req.body.sender_type === 'bot' || _.contains(blacklist, req.body.user_id)) {
         return next();
     }
 
@@ -57,7 +58,7 @@ app.post('/', function (req, res, next) {
     if (!req.body.text) return next();
     req.body.text = S(req.body.text).collapseWhitespace().s;
 
-    if (req.body.sender_type === 'bot' || (shutup[req.body.group_id] && !req.body.text.match(/^alfred[.!?]?$/i))) {
+    if (req.body.sender_type === 'bot' || _.contains(blacklist, req.body.user_id) || (shutup[req.body.group_id] && !req.body.text.match(/^alfred[.!?]?$/i))) {
         return next();
     }
 
