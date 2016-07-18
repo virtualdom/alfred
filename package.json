@@ -1,7 +1,7 @@
 {
-  "name": "Yiptron",
+  "name": "Alfred",
   "version": "1.0.0",
-  "description": "Yippee Bot",
+  "description": "A neat GroupMe Bot",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
