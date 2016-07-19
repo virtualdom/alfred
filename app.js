@@ -167,12 +167,20 @@ app.post('/', function (req, res, next) {
 
     else if (req.body.text.match(/^alfred(,)? giphy .*/i)) {
         var q = req.body.text.split('giphy ')[1].trim();
-        request('http://api.giphy.com/v1/gifs/search?limit=1&offset=' + _.random(0, 60) + '&api_key=' + credentials.giphy + '&q=' + q, function(e, r, b) {
+        request('http://api.giphy.com/v1/gifs/search?limit=0&api_key=' + credentials.giphy + '&q=' + q, function(e, r, b) {
             b = JSON.parse(b);
-            if (!b.data.length) req.reply = 'Sorry, I could not find anything.';
-            else req.reply = b.data[0].images.original.url;
+            if (!b.pagination.total_count) {
+                req.reply = 'Sorry, I could not find anything.';
+                return next();
+            }
 
-            return next();
+            var max = b.pagination.total_count > 60 ? 60 : b.pagination.total_count - 1;
+
+            request('http://api.giphy.com/v1/gifs/search?limit=1&offset=' + _.random(0, max) + '&api_key=' + credentials.giphy + '&q=' + q, function(e, r, b) {
+                b = JSON.parse(b);
+                req.reply = b.data[0].images.original.url;
+                return next();
+            });
         });
     }
 
