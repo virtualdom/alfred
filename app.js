@@ -183,11 +183,6 @@ app.post('/', function (req, res, next) {
             });
         });
     }
-
-    else if (req.body.text.match(/^alfred(,)? dtf[.!?]?$/i)) {
-        req.reply = _.shuffle(reply.dtf)[0];
-        return next();
-    }
     else if (req.body.text.match(/^alfred(,)? say .*$/i)) {
         var say = req.body.text.split(req.body.text.match(/\bsay /i)[0])[1].trim();
         req.reply = say.charAt(0).toUpperCase() + say.substring(1);
@@ -210,23 +205,6 @@ app.post('/', function (req, res, next) {
         var derp = req.body.text.split(req.body.text.match(/\bderp /i)[0])[1].trim();
         request('http://ermahgerd.herokuapp.com/ternslert?value=' + derp, function(e, r, b){
             req.reply = JSON.parse(b).value;
-            return next();
-        });
-    }
-    else if (req.body.text.match(/^alfred(,)? bible .*$/i)) {
-        var bible = req.body.text.split(req.body.text.match(/\bbible /i)[0])[1].trim();
-
-        request.get('http://labs.bible.org/api/?passage=' + bible, function(e, r, b){
-            b = b.replace(/<b>[0-9:]+<\/b>/g, '');
-
-            if (b.match(/&#[0-9]+;/g)) {
-                b.match(/&#[0-9]+;/g).forEach(function (el, i) {
-                    b = b.replace(el, String.fromCharCode(el.replace('&#', '').replace(';', '')));
-                });
-            }
-
-            req.reply = b;
-
             return next();
         });
     }
@@ -269,11 +247,9 @@ app.post('/', function (req, res, next) {
 
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
-    if (!req.reply) {
-        res.send();
-        return next();
-    } else if (req.body.group_id === 'shakirashakira') res.send(req.reply);
-    else res.send();
+    res.send(req.reply);
+
+    if (!req.reply) return next();
 
     var options = {
         url: 'https://api.groupme.com/v3/bots/post',
