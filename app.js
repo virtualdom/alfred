@@ -174,7 +174,7 @@ app.post('/', function (req, res, next) {
                 return next();
             }
 
-            var max = b.pagination.total_count > 60 ? 60 : b.pagination.total_count - 1;
+            var max = b.pagination.total_count > 20 ? 20 : b.pagination.total_count - 1;
 
             request('http://api.giphy.com/v1/gifs/search?limit=1&offset=' + _.random(0, max) + '&api_key=' + credentials.giphy + '&q=' + q, function(e, r, b) {
                 b = JSON.parse(b);
